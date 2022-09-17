@@ -2,16 +2,31 @@
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types;
 using Telegram.Bot.Exceptions;
+using Microsoft.Extensions.Hosting;
+using Telegram.Bot.Extensions.Polling;
 
 namespace TelegramBot.ConsoleApp
 {
-    internal class Bot
+    internal class Bot : BackgroundService
     {
         private readonly ITelegramBotClient _telegramClient;
 
         public Bot(ITelegramBotClient telegramClient)
         {
             _telegramClient = telegramClient;
+        }
+
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            _telegramClient.StartReceiving(
+                HandleUpdateAsync,
+                HandleErrorAsync,
+                new ReceiverOptions() { AllowedUpdates = { } }, // Здесь выбираем, какие обновления хотим получать. В данном случае разрешены все.
+                cancellationToken: stoppingToken);
+
+            Console.WriteLine("Бот запущен");
+
+            return Task.FromResult(0);
         }
 
         private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -39,7 +54,7 @@ namespace TelegramBot.ConsoleApp
             // Задаем сообщение об ошибке в зависимости от того, какая именно ошибка произошла
             var errorMessage = exception switch
             {
-                ApiRequestException apiRequestException => 
+                ApiRequestException apiRequestException =>
                     $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
                 _ => exception.ToString()
             };
