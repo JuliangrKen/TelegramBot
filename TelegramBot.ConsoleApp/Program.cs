@@ -8,7 +8,7 @@ using TelegramBot.ConsoleApp.Services;
 
 // Достаём из конфига объект и десериализуем его строчкой ниже в модель.
 var filePath = File.ReadAllText($@"{Environment.CurrentDirectory}/BotConfig.json");
-var botToken = JsonSerializer.Deserialize<BotConfigModel>(filePath)?.Token;
+var botToken = JsonSerializer.Deserialize<BotConfig>(filePath)?.Token;
 
 // Объект, отвечающий за постоянный жизненный цикл приложения
 var host = new HostBuilder()
