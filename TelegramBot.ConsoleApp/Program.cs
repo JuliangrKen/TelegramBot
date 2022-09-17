@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using System.Text.Json;
 using Telegram.Bot;
 using TelegramBot.ConsoleApp;
+using TelegramBot.ConsoleApp.Controllers;
 
 // Достаём из конфига объект и десериализуем его строчкой ниже в модель.
 var filePath = File.ReadAllText($@"{Environment.CurrentDirectory}/BotConfig.json");
@@ -23,6 +24,15 @@ Console.WriteLine("Сервис остановлен");
 
 void ConfigureServices(IServiceCollection services)
 {
+    #region Adding a controllers
+
+    services.AddTransient<DefaultMessageController>();
+    services.AddTransient<InlineKeyboardController>();
+    services.AddTransient<TextMessageController>();
+    services.AddTransient<VoiceMessageController>();
+
+    #endregion
+
     // Регистрируем объект TelegramBotClient c токеном подключения
     services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient(botToken ?? ""));
     // Регистрируем постоянно активный сервис бота

@@ -28,6 +28,6 @@ namespace TelegramBot.ConsoleApp.Controllers
         /// <param name="message"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public abstract Task Hangle(Message message, CancellationToken ct);
+        public abstract Task Handle(Message message, CancellationToken ct);
     }
 }

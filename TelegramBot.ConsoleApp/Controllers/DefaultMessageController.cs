@@ -9,7 +9,7 @@ namespace TelegramBot.ConsoleApp.Controllers
         {
         }
 
-        public override async Task Hangle(Message message, CancellationToken ct)
+        public override async Task Handle(Message message, CancellationToken ct)
         {
             Console.WriteLine($"Контроллер {GetType().Name} получил сообщение");
             await telegramBotClient.SendTextMessageAsync(message.Chat.Id, $"Получено сообщение не поддерживаемого формата", cancellationToken: ct);
