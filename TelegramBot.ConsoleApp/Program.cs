@@ -6,10 +6,6 @@ using TelegramBot.ConsoleApp;
 using TelegramBot.ConsoleApp.Controllers;
 using TelegramBot.ConsoleApp.Services;
 
-// Достаём из конфига объект и десериализуем его строчкой ниже в модель.
-var filePath = File.ReadAllText($@"{Environment.CurrentDirectory}/BotConfig.json");
-var botToken = JsonSerializer.Deserialize<BotConfig>(filePath)?.Token;
-
 // Объект, отвечающий за постоянный жизненный цикл приложения
 var host = new HostBuilder()
     .ConfigureServices((hostContext, services) => ConfigureServices(services)) // Задаем конфигурацию
@@ -34,10 +30,20 @@ void ConfigureServices(IServiceCollection services)
 
     #endregion
 
+    // Регистрируем метод получения конфигурации бота
+    services.AddSingleton(GetBotConfig());
+    var botConfig = GetBotConfig();
     // Регистрируем объект TelegramBotClient c токеном подключения
-    services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient(botToken ?? ""));
+    services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient(botConfig.Token ?? ""));
     // Регистрируем постоянно активный сервис бота
     services.AddHostedService<Bot>();
     // Регистрируем сервис получения данных о сессии пользователя
     services.AddSingleton<IStorage, MemoryStorage>();
+}
+
+BotConfig GetBotConfig()
+{
+    // Достаём из конфига объект и десериализуем его строчкой ниже в модель.
+    var json = File.ReadAllText($@"{Environment.CurrentDirectory}/BotConfig.json");
+    return JsonSerializer.Deserialize<BotConfig>(json) ?? throw new ArgumentNullException();
 }
