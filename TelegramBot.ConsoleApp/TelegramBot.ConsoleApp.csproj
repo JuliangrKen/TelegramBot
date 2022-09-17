@@ -13,4 +13,29 @@
     <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="BotConfig.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BotConfig.json</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="BotConfig.json">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BotConfig.cs</LastGenOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="BotConfig.txt">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BotConfig.json</DependentUpon>
+    </None>
+  </ItemGroup>
+
 </Project>
