@@ -1,4 +1,5 @@
 ﻿using Telegram.Bot;
+using Telegram.Bot.Types;
 
 namespace TelegramBot.ConsoleApp.Controllers
 {
@@ -24,7 +25,9 @@ namespace TelegramBot.ConsoleApp.Controllers
         /// <summary>
         /// Обязательный обработчик
         /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        public abstract Task Hangle();
+        public abstract Task Hangle(Message message, CancellationToken ct);
     }
 }
