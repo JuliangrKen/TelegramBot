@@ -3,7 +3,7 @@ using Telegram.Bot.Types;
 
 namespace TelegramBot.ConsoleApp.Controllers
 {
-    public class DefaultMessageController : AbstractController
+    public class DefaultMessageController : AbstractMessageController
     {
         public DefaultMessageController(ITelegramBotClient telegramBotClient) : base(telegramBotClient)
         {

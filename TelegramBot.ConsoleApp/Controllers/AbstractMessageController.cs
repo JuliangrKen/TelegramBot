@@ -6,7 +6,7 @@ namespace TelegramBot.ConsoleApp.Controllers
     /// <summary>
     /// Абстрактный класс для создания контроллеров
     /// </summary>
-    public abstract class AbstractController
+    public abstract class AbstractMessageController
     {
         /// <summary>
         /// Поле, хранящее ссылку на клиент бота телеграм
@@ -17,7 +17,7 @@ namespace TelegramBot.ConsoleApp.Controllers
         /// Конструктор, инициализирующий telegramBotClient
         /// </summary>
         /// <param name="telegramBotClient"></param>
-        public AbstractController(ITelegramBotClient telegramBotClient)
+        public AbstractMessageController(ITelegramBotClient telegramBotClient)
         {
             this.telegramBotClient = telegramBotClient;
         }

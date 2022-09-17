@@ -8,7 +8,7 @@ using Telegram.Bot;
 
 namespace TelegramBot.ConsoleApp.Controllers
 {
-    public class VoiceMessageController : AbstractController
+    public class VoiceMessageController : AbstractMessageController
     {
         public VoiceMessageController(ITelegramBotClient telegramBotClient) : base(telegramBotClient)
         {
