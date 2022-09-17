@@ -55,20 +55,20 @@ namespace TelegramBot.ConsoleApp
             }
 
             // Обрабатываем входящие сообщения из Telegram Bot API: https://core.telegram.org/bots/api#message
-            if (update.Type == UpdateType.Message)
+            if (update.Type != UpdateType.Message)
+                return;
+            
+            switch (update.Message!.Type)
             {
-                switch (update.Message!.Type)
-                {
-                    case MessageType.Voice:
-                        await _voiceMessageController.Handle(update.Message, cancellationToken);
-                        return;
-                    case MessageType.Text:
-                        await _textMessageController.Handle(update.Message, cancellationToken);
-                        return;
-                    default:
-                        await _defaultMessageController.Handle(update.Message, cancellationToken);
-                        return;
-                }
+                case MessageType.Voice:
+                    await _voiceMessageController.Handle(update.Message, cancellationToken);
+                    return;
+                case MessageType.Text:
+                    await _textMessageController.Handle(update.Message, cancellationToken);
+                    return;
+                default:
+                    await _defaultMessageController.Handle(update.Message, cancellationToken);
+                    return;
             }
         }
 
