@@ -1,17 +1,18 @@
 ﻿using Telegram.Bot;
 using TelegramBot.ConsoleApp.Configuration;
+using TelegramBot.ConsoleApp.Utilities;
 
 namespace TelegramBot.ConsoleApp.Services
 {
     public class AudioFileHandler : IFileHandler
     {
-        private readonly string fullPathToFile;
+        private readonly BotConfig botConfig;
         private readonly ITelegramBotClient telegramBotClient;
 
         public AudioFileHandler(ITelegramBotClient telegramBotClient, BotConfig botConfig)
         {
             // Генерируем полный путь файла из конфигурации
-            fullPathToFile = Path.Combine(botConfig.DownloadsFolder ?? Environment.CurrentDirectory, $"{botConfig.AudioFileName ?? "Audio"}.ogg");
+            this.botConfig = botConfig;
             this.telegramBotClient = telegramBotClient;
         }
 
@@ -21,16 +22,24 @@ namespace TelegramBot.ConsoleApp.Services
             var file = await telegramBotClient.GetFileAsync(fileId, ct);
             if (file.FilePath == null)
                 return;
-            
+
+            var fullPathToAudioFile = Path.Combine(botConfig.DownloadsFolder ?? Environment.CurrentDirectory, $"{botConfig.AudioFileName ?? "Audio"}.ogg");
+
             // Скачиваем файл
-            using FileStream destinationStream = File.Create(fullPathToFile);
+            using FileStream destinationStream = File.Create(fullPathToAudioFile);
             await telegramBotClient.DownloadFileAsync(file.FilePath, destinationStream, ct);
         }
 
         public string Process(string languageCode)
         {
-            // Метод пока не реализован
-            throw new NotImplementedException();
+            var inputAudioPath = Path.Combine(botConfig.DownloadsFolder ?? Environment.CurrentDirectory, $"{botConfig.AudioFileName ?? "Audio"}.ogg");
+            var outputAudioPath = Path.Combine(botConfig.DownloadsFolder ?? Environment.CurrentDirectory, $"{botConfig.AudioFileName ?? "Audio"}.wav");
+
+            Console.WriteLine("Начинаем конвертацию...");
+            AudioConverter.TryConvert(inputAudioPath, outputAudioPath);
+            Console.WriteLine("Файл конвертирован");
+
+            return "Конвертация успешно завершена";
         }
     }
 }
