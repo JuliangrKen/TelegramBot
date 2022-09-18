@@ -39,7 +39,10 @@ namespace TelegramBot.ConsoleApp.Services
             AudioConverter.TryConvert(inputAudioPath, outputAudioPath);
             Console.WriteLine("Файл конвертирован");
 
-            return "Конвертация успешно завершена";
+            Console.WriteLine("Начинаем распознавание...");
+            var speechText = SpeechDetector.DetectSpeech(outputAudioPath, 48000, languageCode);
+            Console.WriteLine("Файл распознан.");
+            return speechText;
         }
     }
 }

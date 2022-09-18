@@ -21,10 +21,14 @@ namespace TelegramBot.ConsoleApp.Controllers
             if (fileId == null) return;
 
             await audioFileHandler.Download(fileId, ct);
-            await telegramBotClient.SendTextMessageAsync(message.Chat.Id, "Голосовое сообщение загружено", cancellationToken: ct);
 
-            audioFileHandler.Process(memoryStorage.GetSession(message.Chat.Id).LanguageCode ?? "ru");
-            await telegramBotClient.SendTextMessageAsync(message.Chat.Id, "Голосовое сообщение конвертировано в формат .WAV", cancellationToken: ct);
+            var result = audioFileHandler.Process(memoryStorage.GetSession(message.Chat.Id).LanguageCode ?? "ru");
+            if (string.IsNullOrEmpty(result))
+            {
+                await telegramBotClient.SendTextMessageAsync(message.Chat.Id, "Ошибка! Не получилось распознать речь.", cancellationToken: ct);
+                return;
+            }
+            await telegramBotClient.SendTextMessageAsync(message.Chat.Id, result, cancellationToken: ct);
         }
     }
 }
