@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using System.Text.Json;
 using Telegram.Bot;
 using TelegramBot.ConsoleApp;
+using TelegramBot.ConsoleApp.Configuration;
 using TelegramBot.ConsoleApp.Controllers;
 using TelegramBot.ConsoleApp.Services;
 
@@ -39,11 +40,13 @@ void ConfigureServices(IServiceCollection services)
     services.AddHostedService<Bot>();
     // Регистрируем сервис получения данных о сессии пользователя
     services.AddSingleton<IStorage, MemoryStorage>();
+    // Регистрируем сервис загрузки аудио-файлов 
+    services.AddSingleton<IFileHandler, AudioFileHandler>();
 }
 
 BotConfig GetBotConfig()
 {
-    var json = File.ReadAllText($@"{Environment.CurrentDirectory}/BotConfig.json"); // Достаём из конфига объект 
+    var json = File.ReadAllText($@"{Environment.CurrentDirectory}/Configuration/BotConfig.json"); // Достаём из конфига объект 
     return JsonSerializer.Deserialize<BotConfig>(json) // Десериализуем его в BotConfig
            ?? throw new ArgumentNullException(); // При неудаче вызываем ошибку нулевого аргумента
 }

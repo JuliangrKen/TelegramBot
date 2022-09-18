@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Telegram.Bot.Types;
+﻿using Telegram.Bot.Types;
 using Telegram.Bot;
+using TelegramBot.ConsoleApp.Services;
 
 namespace TelegramBot.ConsoleApp.Controllers
 {
     public class VoiceMessageController : AbstractMessageController
     {
-        public VoiceMessageController(ITelegramBotClient telegramBotClient) : base(telegramBotClient)
+        private readonly IFileHandler audioFileHandler;
+
+        public VoiceMessageController(ITelegramBotClient telegramBotClient, IFileHandler audioFileHandler) : base(telegramBotClient)
         {
+            this.audioFileHandler = audioFileHandler;
         }
 
         public override async Task Handle(Message message, CancellationToken ct)
         {
-            Console.WriteLine($"Контроллер {GetType().Name} получил сообщение");
-            await telegramBotClient.SendTextMessageAsync(message.Chat.Id, $"Получено голосовое сообщение", cancellationToken: ct);
+            var fileId = message.Voice?.FileId;
+            if (fileId == null) return;
+
+            await audioFileHandler.Download(fileId, ct);
+            await telegramBotClient.SendTextMessageAsync(message.Chat.Id, "Голосовое сообщение загружено", cancellationToken: ct);
         }
     }
 }
