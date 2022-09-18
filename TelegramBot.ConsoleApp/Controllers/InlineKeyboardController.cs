@@ -22,8 +22,8 @@ namespace TelegramBot.ConsoleApp.Controllers
             Console.WriteLine($"Контроллер {GetType().Name} обнаружил нажатие на кнопку");
 
             if (callbackQuery == null) return;
-            
-            await telegramBotClient.SendTextMessageAsync(callbackQuery.From.Id, $"Обнаружено нажатие на кнопку", cancellationToken: ct);
+
+            await telegramBotClient.SendTextMessageAsync(callbackQuery.From.Id, $"Обнаружено нажатие на кнопку {callbackQuery.Data}", cancellationToken: ct);
         }
     }
 }

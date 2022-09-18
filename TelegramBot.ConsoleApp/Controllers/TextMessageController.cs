@@ -22,8 +22,8 @@ namespace TelegramBot.ConsoleApp.Controllers
                     {
                         new[]
                         {
-                            InlineKeyboardButton.WithCallbackData($" Русский" , $"ru"),
-                            InlineKeyboardButton.WithCallbackData($" English" , $"en")
+                            InlineKeyboardButton.WithCallbackData($"🇷🇺 Русский" , $"ru"),
+                            InlineKeyboardButton.WithCallbackData($"🇬🇧 English" , $"en")
                         }
                     };
 
