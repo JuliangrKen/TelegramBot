@@ -43,7 +43,7 @@ void ConfigureServices(IServiceCollection services)
 
 BotConfig GetBotConfig()
 {
-    // Достаём из конфига объект и десериализуем его строчкой ниже в модель.
-    var json = File.ReadAllText($@"{Environment.CurrentDirectory}/BotConfig.json");
-    return JsonSerializer.Deserialize<BotConfig>(json) ?? throw new ArgumentNullException();
+    var json = File.ReadAllText($@"{Environment.CurrentDirectory}/BotConfig.json"); // Достаём из конфига объект 
+    return JsonSerializer.Deserialize<BotConfig>(json) // Десериализуем его в BotConfig
+           ?? throw new ArgumentNullException(); // При неудаче вызываем ошибку нулевого аргумента
 }
